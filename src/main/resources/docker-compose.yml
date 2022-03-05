@@ -2,6 +2,7 @@ version: "3.4"
 
 services:
   zookeeper:
+    container_name: techbank_zookeeper
     image: bitnami/zookeeper
     restart: always
     ports:
@@ -11,6 +12,7 @@ services:
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
   kafka:
+    container_name: techbank_kafka
     image: bitnami/kafka
     ports:
       - "9092:9092"
@@ -25,6 +27,7 @@ services:
     depends_on:
       - zookeeper
   mongo:
+    container_name: techbank_mongo
     image: mongo:latest
     restart: always
     ports:
@@ -35,23 +38,28 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123456
   postgresql:
-    container_name: techbank_postgresql_1
+    container_name: techbank_postgresql
     image: postgres
     restart: always
+    command:
+      - "postgres"
+      - "-c"
+      - "wal_level=logical"
     ports:
-      - "3306:3306"
+      - "5433:5432"
     volumes:
       - "postgresql_data:/var/lib/postgresql"
     environment:
-      POSTGRES_USER: root
       POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: techbank-account-query
   postgresql-adminer:
+    container_name: techbank_pg_adminer
     image: adminer
     restart: always
     ports:
       - "8080:8080"
     environment:
-      ADMINER_DEFAULT_SERVER: techbank_postgresql_1
+      ADMINER_DEFAULT_SERVER: techbank_postgresql
 volumes:
   zookeeper_data:
     driver: local

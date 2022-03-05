@@ -1,0 +1,29 @@
+server:
+  port: 5001
+spring:
+  jpa:
+    database-platform: postgres
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+  datasource:
+    url: jdbc:postgresql://localhost:3306/techbank-account-query
+    username: postgres
+    password: 123456
+  kafka:
+    listener:
+      ack-mode: manual_immediate
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: tech-bank-acc-consumer
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+
+
