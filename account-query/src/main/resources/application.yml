@@ -2,13 +2,13 @@ server:
   port: 5001
 spring:
   jpa:
-    database-platform: postgres
+    database-platform: org.hibernate.dialect.PostgreSQL10Dialect
     show-sql: true
     hibernate:
       ddl-auto: update
     open-in-view: false
   datasource:
-    url: jdbc:postgresql://localhost:3306/techbank-account-query
+    url: jdbc:postgresql://localhost:5433/techbank-account-query
     username: postgres
     password: 123456
   kafka:
