@@ -11,14 +11,13 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-@Document(collation = "eventStore")
+@Document(collection = "event-store")
 public class EventModel {
     @Id
     private String id;
     private LocalDateTime systemCaptureDateTime;
     private AggregateId aggregateId;
     private String aggregateType;
-    @Version
     private long version;
     private String eventType;
     private Event event;

@@ -3,6 +3,7 @@ package com.evil.inc.cqrs.core.domain;
 import com.evil.inc.cqrs.core.events.Event;
 import lombok.extern.slf4j.Slf4j;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
@@ -11,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class AggregateRoot {
     private final List<Event> changes = new ArrayList<>();
     protected AggregateId id;
-    private final AtomicLong version = new AtomicLong();
+    private long version = -1;
 
     public String getId() {
         return id.toString();
@@ -22,11 +23,11 @@ public class AggregateRoot {
     }
 
     public long getVersion() {
-        return version.get();
+        return version;
     }
 
     public void setVersion(long version) {
-        this.version.set(version);
+        this.version = version;
     }
 
     public List<Event> getUncommittedChanges() {
@@ -39,7 +40,9 @@ public class AggregateRoot {
 
     protected void applyChange(Event event, boolean isNewEvent) {
         try {
-            getClass().getDeclaredMethod("apply", event.getClass());
+            final Method method = getClass().getDeclaredMethod("apply", event.getClass());
+            method.setAccessible(true);
+            method.invoke(this, event);
         } catch (NoSuchMethodException e) {
             log.warn("The apply method was not found in the aggregate for {}", event.getClass().getName());
         } catch (Exception e) {
@@ -48,7 +51,6 @@ public class AggregateRoot {
             if (isNewEvent) {
                 changes.add(event);
             }
-            version.incrementAndGet();
         }
     }
 

@@ -24,30 +24,26 @@ class AccountEventStore implements EventStore {
 
     @Override
     public void saveEvent(AggregateId aggregateId, Iterable<Event> events, long expectedVersion) {
+        final List<EventModel> byAggregateId = eventStoreRepository.findByAggregateId(aggregateId);
+        if (expectedVersion != -1 && byAggregateId.get(byAggregateId.size() - 1).getVersion() != expectedVersion) {
+            throw new EventStoreConcurrencyException(aggregateId, AccountAggregate.class, expectedVersion);
+        }
         for (var event : events) {
-            var eventModel = toEventModel(event);
-            EventModel persistedEvent = null;
-            try {
-                persistedEvent = eventStoreRepository.save(eventModel);
-            } catch (OptimisticLockingFailureException e) {
-                handleSQLException(aggregateId, expectedVersion);
-            }
+            var eventModel = toEventModel(event, ++expectedVersion);
+            EventModel persistedEvent = eventStoreRepository.save(eventModel);
             if (!persistedEvent.getId().isEmpty()) {
                 eventProducer.produce(event.getClass().getSimpleName(), event);
             }
         }
     }
 
-    private void handleSQLException(AggregateId aggregateId, long expectedVersion) {
-        throw new EventStoreConcurrencyException(aggregateId, AccountAggregate.class, expectedVersion);
-    }
-
-    private EventModel toEventModel(Event event) {
+    private EventModel toEventModel(Event event, long version) {
+        event.setVersion(version);
         return EventModel.builder()
                 .systemCaptureDateTime(event.getSystemCaptureDateTime())
                 .aggregateId(event.getAggregateId())
                 .aggregateType(AccountAggregate.class.getTypeName())
-                .version(event.getVersion())
+                .version(version)
                 .eventType(event.getType())
                 .event(event)
                 .build();
@@ -56,7 +52,7 @@ class AccountEventStore implements EventStore {
     @Override
     public List<Event> getEvents(AggregateId aggregateId) {
         final List<EventModel> events = eventStoreRepository.findByAggregateId(aggregateId);
-        if(events == null || events.isEmpty()){
+        if (events == null || events.isEmpty()) {
             throw new InvalidAggregateException("Invalid account id provided.");
         }
         return events.stream().map(EventModel::getEvent).collect(Collectors.toList());
