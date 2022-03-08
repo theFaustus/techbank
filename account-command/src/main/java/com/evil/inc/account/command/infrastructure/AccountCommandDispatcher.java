@@ -14,7 +14,7 @@ public final class AccountCommandDispatcher implements CommandDispatcher<Command
     private final Map<Class<? extends Command>, CommandHandlerConsumer<Command>> routes = new HashMap<>();
 
     @Override
-    public void registerHandler(Class<Command> type, CommandHandlerConsumer<Command> handler) {
+    public <C extends Command> void registerHandler(Class<C> type, CommandHandlerConsumer<Command> handler) {
         routes.put(type, handler);
     }
 

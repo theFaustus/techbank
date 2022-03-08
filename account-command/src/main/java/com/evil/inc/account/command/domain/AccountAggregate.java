@@ -28,6 +28,10 @@ public class AccountAggregate extends AggregateRoot {
                 .build());
     }
 
+    public double getBalance() {
+        return balance;
+    }
+
     public void depositFunds(DepositFundsCommand command) {
         if (!active) {
             throw new IllegalStateException("Funds cannot be deposited into a closed account!");
@@ -44,6 +48,9 @@ public class AccountAggregate extends AggregateRoot {
     public void withdrawFunds(WithdrawFundsCommand command) {
         if (!active) {
             throw new IllegalStateException("Funds cannot be withdrawn from a closed account!");
+        }
+        if (command.getAmount() > balance) {
+            throw new IllegalStateException("Funds cannot be withdrawn. Insufficient funds on the balance!");
         }
         applyNewChange(FundsWithdrawnEvent.builder()
                 .id(this.id)

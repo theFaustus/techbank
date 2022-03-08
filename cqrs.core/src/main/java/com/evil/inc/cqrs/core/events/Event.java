@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public abstract class BaseEvent extends Message {
-    private int version;
+public abstract class Event extends Message {
+    private long version;
     private LocalDateTime systemCaptureDateTime = LocalDateTime.now();
 
     public String getType() {
