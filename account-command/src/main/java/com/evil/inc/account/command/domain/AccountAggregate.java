@@ -20,7 +20,7 @@ public class AccountAggregate extends AggregateRoot {
 
     public AccountAggregate(OpenAccountCommand command) {
         applyNewChange(AccountOpenedEvent.builder()
-                .id(command.getId())
+                .aggregateId(command.getAggregateId())
                 .accountHolder(command.getAccountHolder())
                 .creationDate(LocalDateTime.now())
                 .accountType(command.getAccountType())
@@ -40,7 +40,7 @@ public class AccountAggregate extends AggregateRoot {
             throw new IllegalStateException("The deposit amount must be greater than 0!");
         }
         applyNewChange(FundsDepositedEvent.builder()
-                .id(this.id)
+                .aggregateId(this.id)
                 .amount(command.getAmount())
                 .build());
     }
@@ -53,7 +53,7 @@ public class AccountAggregate extends AggregateRoot {
             throw new IllegalStateException("Funds cannot be withdrawn. Insufficient funds on the balance!");
         }
         applyNewChange(FundsWithdrawnEvent.builder()
-                .id(this.id)
+                .aggregateId(this.id)
                 .amount(command.getAmount())
                 .build());
     }
@@ -62,27 +62,27 @@ public class AccountAggregate extends AggregateRoot {
         if (!active) {
             throw new IllegalStateException("Cannot close an already closed account!");
         }
-        applyNewChange(AccountClosedEvent.builder().id(this.id).build());
+        applyNewChange(AccountClosedEvent.builder().aggregateId(this.id).build());
     }
 
     public void apply(AccountOpenedEvent event) {
-        this.id = event.getId();
+        this.id = event.getAggregateId();
         this.active = true;
         this.balance = event.getOpeningBalance();
     }
 
     public void apply(FundsDepositedEvent event) {
-        this.id = event.getId();
+        this.id = event.getAggregateId();
         this.balance += event.getAmount();
     }
 
     public void apply(FundsWithdrawnEvent event) {
-        this.id = event.getId();
+        this.id = event.getAggregateId();
         this.balance -= event.getAmount();
     }
 
     public void apply(AccountClosedEvent event) {
-        this.id = event.getId();
+        this.id = event.getAggregateId();
         this.active = false;
     }
 }

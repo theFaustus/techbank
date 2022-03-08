@@ -15,7 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AccountEventSourcingHandler implements EventSourcingHandler<AccountAggregate> {
+class AccountEventSourcingHandler implements EventSourcingHandler<AccountAggregate> {
     private final EventStore eventStore;
 
     @Override

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public final class AccountCommandDispatcher implements CommandDispatcher<Command> {
+final class AccountCommandDispatcher implements CommandDispatcher<Command> {
 
     private final Map<Class<? extends Command>, CommandHandlerConsumer<Command>> routes = new HashMap<>();
 

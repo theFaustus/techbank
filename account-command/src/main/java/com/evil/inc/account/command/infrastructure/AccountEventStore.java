@@ -8,6 +8,7 @@ import com.evil.inc.cqrs.core.events.EventModel;
 import com.evil.inc.cqrs.core.exceptions.EventStoreConcurrencyException;
 import com.evil.inc.cqrs.core.exceptions.InvalidAggregateException;
 import com.evil.inc.cqrs.core.infrastructure.EventStore;
+import com.evil.inc.cqrs.core.producers.EventProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
@@ -17,8 +18,9 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AccountEventStore implements EventStore {
+class AccountEventStore implements EventStore {
     private final EventStoreRepository eventStoreRepository;
+    private final EventProducer eventProducer;
 
     @Override
     public void saveEvent(AggregateId aggregateId, Iterable<Event> events, long expectedVersion) {
@@ -30,8 +32,8 @@ public class AccountEventStore implements EventStore {
             } catch (OptimisticLockingFailureException e) {
                 handleSQLException(aggregateId, expectedVersion);
             }
-            if (persistedEvent != null) {
-                //TODO: produce event to Kafka
+            if (!persistedEvent.getId().isEmpty()) {
+                eventProducer.produce(event.getClass().getSimpleName(), event);
             }
         }
     }
@@ -43,7 +45,7 @@ public class AccountEventStore implements EventStore {
     private EventModel toEventModel(Event event) {
         return EventModel.builder()
                 .systemCaptureDateTime(event.getSystemCaptureDateTime())
-                .aggregateId(event.getId())
+                .aggregateId(event.getAggregateId())
                 .aggregateType(AccountAggregate.class.getTypeName())
                 .version(event.getVersion())
                 .eventType(event.getType())

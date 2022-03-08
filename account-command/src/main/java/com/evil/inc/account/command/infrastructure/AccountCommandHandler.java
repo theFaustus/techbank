@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AccountCommandHandler implements CommandHandler {
+class AccountCommandHandler implements CommandHandler {
     private final EventSourcingHandler<AccountAggregate> eventSourcingHandler;
 
     @Override
@@ -22,21 +22,21 @@ public class AccountCommandHandler implements CommandHandler {
 
     @Override
     public void handle(DepositFundsCommand command) {
-        final AccountAggregate aggregate = eventSourcingHandler.getById(command.getId());
+        final AccountAggregate aggregate = eventSourcingHandler.getById(command.getAggregateId());
         aggregate.depositFunds(command);
         eventSourcingHandler.save(aggregate);
     }
 
     @Override
     public void handle(WithdrawFundsCommand command) {
-        final AccountAggregate aggregate = eventSourcingHandler.getById(command.getId());
+        final AccountAggregate aggregate = eventSourcingHandler.getById(command.getAggregateId());
         aggregate.withdrawFunds(command);
         eventSourcingHandler.save(aggregate);
     }
 
     @Override
     public void handle(CloseAccountCommand command) {
-        final AccountAggregate aggregate = eventSourcingHandler.getById(command.getId());
+        final AccountAggregate aggregate = eventSourcingHandler.getById(command.getAggregateId());
         aggregate.closeAccount(command);
         eventSourcingHandler.save(aggregate);
     }

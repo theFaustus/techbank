@@ -11,5 +11,5 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @AllArgsConstructor
 public abstract class Message {
-    private AggregateId id;
+    private AggregateId aggregateId;
 }
