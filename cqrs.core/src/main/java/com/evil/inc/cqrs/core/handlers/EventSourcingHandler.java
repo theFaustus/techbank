@@ -6,4 +6,5 @@ import com.evil.inc.cqrs.core.domain.AggregateRoot;
 public interface EventSourcingHandler<T> {
     void save(AggregateRoot aggregateRoot);
     T getById(AggregateId aggregateId);
+    void republishEvents();
 }

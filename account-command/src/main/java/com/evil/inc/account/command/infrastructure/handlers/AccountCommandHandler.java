@@ -3,6 +3,7 @@ package com.evil.inc.account.command.infrastructure.handlers;
 import com.evil.inc.account.command.api.commands.CloseAccountCommand;
 import com.evil.inc.account.command.api.commands.DepositFundsCommand;
 import com.evil.inc.account.command.api.commands.OpenAccountCommand;
+import com.evil.inc.account.command.api.commands.RestoreDbCommand;
 import com.evil.inc.account.command.api.commands.WithdrawFundsCommand;
 import com.evil.inc.account.command.domain.AccountAggregate;
 import com.evil.inc.cqrs.core.handlers.EventSourcingHandler;
@@ -39,5 +40,10 @@ class AccountCommandHandler implements CommandHandler {
         final AccountAggregate aggregate = eventSourcingHandler.getById(command.getAggregateId());
         aggregate.closeAccount(command);
         eventSourcingHandler.save(aggregate);
+    }
+
+    @Override
+    public void handle(RestoreDbCommand command) {
+        eventSourcingHandler.republishEvents();
     }
 }

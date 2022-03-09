@@ -55,4 +55,9 @@ class AccountEventStore implements EventStore {
         }
         return events.stream().map(EventModel::getEvent).collect(Collectors.toList());
     }
+
+    @Override
+    public List<AggregateId> getAggregateIds() {
+        return eventStoreRepository.findAll().stream().map(EventModel::getAggregateId).collect(Collectors.toList());
+    }
 }

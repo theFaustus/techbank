@@ -8,5 +8,5 @@ import java.util.List;
 public interface EventStore {
     void saveEvent(AggregateId aggregateId, Iterable<Event> events, long expectedVersion);
     List<Event> getEvents(AggregateId aggregateId);
-
+    List<AggregateId> getAggregateIds();
 }

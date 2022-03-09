@@ -85,4 +85,8 @@ public class AccountAggregate extends AggregateRoot {
         this.id = event.getAggregateId();
         this.active = false;
     }
+
+    public boolean isActive() {
+        return active;
+    }
 }

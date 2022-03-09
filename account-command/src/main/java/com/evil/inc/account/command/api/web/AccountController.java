@@ -3,6 +3,7 @@ package com.evil.inc.account.command.api.web;
 import com.evil.inc.account.command.api.commands.CloseAccountCommand;
 import com.evil.inc.account.command.api.commands.DepositFundsCommand;
 import com.evil.inc.account.command.api.commands.OpenAccountCommand;
+import com.evil.inc.account.command.api.commands.RestoreDbCommand;
 import com.evil.inc.account.command.api.commands.WithdrawFundsCommand;
 import com.evil.inc.account.common.dto.Response;
 import com.evil.inc.cqrs.core.commands.Command;
@@ -43,6 +44,12 @@ public class AccountController {
     public ResponseEntity<Response> withdrawFunds(@RequestBody WithdrawFundsCommand command){
         commandDispatcher.dispatch(command);
         return ResponseEntity.ok(new Response("Successfully withdrawn " + command.getAmount() + " from account [" + command.getAggregateId() + "]"));
+    }
+
+    @PostMapping("/republish")
+    public ResponseEntity<Response> republishEvents(){
+        commandDispatcher.dispatch(new RestoreDbCommand());
+        return ResponseEntity.ok(new Response("Restore of the DB started successfully"));
     }
 
     @DeleteMapping

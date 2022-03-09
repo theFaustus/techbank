@@ -7,6 +7,7 @@ import com.evil.inc.cqrs.core.events.Event;
 import com.evil.inc.cqrs.core.exceptions.InvalidAggregateVersionException;
 import com.evil.inc.cqrs.core.handlers.EventSourcingHandler;
 import com.evil.inc.cqrs.core.infrastructure.EventStore;
+import com.evil.inc.cqrs.core.producers.EventProducer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 class AccountEventSourcingHandler implements EventSourcingHandler<AccountAggregate> {
     private final EventStore eventStore;
+    private final EventProducer eventProducer;
 
     @Override
     public void save(AggregateRoot aggregateRoot) {
@@ -37,5 +39,18 @@ class AccountEventSourcingHandler implements EventSourcingHandler<AccountAggrega
             accountAggregate.setVersion(latestVersion);
         }
         return accountAggregate;
+    }
+
+    @Override
+    public void republishEvents() {
+        final List<AggregateId> aggregateIds = eventStore.getAggregateIds();
+        for (AggregateId aggregateId : aggregateIds) {
+            final AccountAggregate accountAggregate = getById(aggregateId);
+            if(accountAggregate == null || !accountAggregate.isActive()) continue;
+            final List<Event> events = eventStore.getEvents(aggregateId);
+            for (Event event : events) {
+                eventProducer.produce(accountAggregate.getClass().getSimpleName(), event);
+            }
+        }
     }
 }
