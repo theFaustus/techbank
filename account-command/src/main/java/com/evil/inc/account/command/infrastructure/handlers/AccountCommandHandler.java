@@ -1,4 +1,4 @@
-package com.evil.inc.account.command.infrastructure;
+package com.evil.inc.account.command.infrastructure.handlers;
 
 import com.evil.inc.account.command.api.commands.CloseAccountCommand;
 import com.evil.inc.account.command.api.commands.DepositFundsCommand;

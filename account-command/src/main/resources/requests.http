@@ -35,3 +35,18 @@ Content-Type: application/json
 {
   "aggregateId": "feb74b46-f7d3-4286-bb43-6e26917bf477"
 }
+
+###
+
+GET http://localhost:5001/api/v1/accounts
+Content-Type: application/json
+
+###
+
+GET http://localhost:5001/api/v1/accounts/4ce93188-e879-4812-a374-7f6280ff4214
+Content-Type: application/json
+
+###
+
+GET http://localhost:5001/api/v1/accounts?accountHolder=Bob Dylan
+Content-Type: application/json

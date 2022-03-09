@@ -4,7 +4,7 @@ import com.evil.inc.account.common.events.AccountClosedEvent;
 import com.evil.inc.account.common.events.AccountOpenedEvent;
 import com.evil.inc.account.common.events.FundsDepositedEvent;
 import com.evil.inc.account.common.events.FundsWithdrawnEvent;
-import com.evil.inc.account.query.domain.AccountRepository;
+import com.evil.inc.account.query.infrastructure.AccountRepository;
 import com.evil.inc.account.query.domain.BankAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

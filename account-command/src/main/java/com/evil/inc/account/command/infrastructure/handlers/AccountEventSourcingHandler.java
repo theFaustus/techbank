@@ -1,4 +1,4 @@
-package com.evil.inc.account.command.infrastructure;
+package com.evil.inc.account.command.infrastructure.handlers;
 
 import com.evil.inc.account.command.domain.AccountAggregate;
 import com.evil.inc.cqrs.core.domain.AggregateId;

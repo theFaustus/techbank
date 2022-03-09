@@ -1,4 +1,4 @@
-package com.evil.inc.account.command.domain;
+package com.evil.inc.account.command.infrastructure;
 
 import com.evil.inc.cqrs.core.domain.AggregateId;
 import com.evil.inc.cqrs.core.events.EventModel;

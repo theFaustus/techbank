@@ -1,4 +1,4 @@
-package com.evil.inc.account.command.infrastructure;
+package com.evil.inc.account.command.infrastructure.producers;
 
 import com.evil.inc.cqrs.core.events.Event;
 import com.evil.inc.cqrs.core.producers.EventProducer;

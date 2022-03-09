@@ -18,7 +18,7 @@ import java.util.Objects;
 @SuperBuilder
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AbstractEntity {
+public abstract class AbstractEntity extends BaseEntity {
     @Id
     protected String id;
 

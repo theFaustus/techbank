@@ -1,5 +1,6 @@
-package com.evil.inc.account.query.domain;
+package com.evil.inc.account.query.infrastructure;
 
+import com.evil.inc.account.query.domain.BankAccount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

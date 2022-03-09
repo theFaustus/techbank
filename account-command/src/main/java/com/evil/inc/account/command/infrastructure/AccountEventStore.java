@@ -1,7 +1,6 @@
 package com.evil.inc.account.command.infrastructure;
 
 import com.evil.inc.account.command.domain.AccountAggregate;
-import com.evil.inc.account.command.domain.EventStoreRepository;
 import com.evil.inc.cqrs.core.domain.AggregateId;
 import com.evil.inc.cqrs.core.events.Event;
 import com.evil.inc.cqrs.core.events.EventModel;
@@ -10,7 +9,6 @@ import com.evil.inc.cqrs.core.exceptions.InvalidAggregateException;
 import com.evil.inc.cqrs.core.infrastructure.EventStore;
 import com.evil.inc.cqrs.core.producers.EventProducer;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

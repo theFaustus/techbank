@@ -4,7 +4,7 @@ import com.evil.inc.account.command.api.commands.CloseAccountCommand;
 import com.evil.inc.account.command.api.commands.DepositFundsCommand;
 import com.evil.inc.account.command.api.commands.OpenAccountCommand;
 import com.evil.inc.account.command.api.commands.WithdrawFundsCommand;
-import com.evil.inc.account.command.infrastructure.CommandHandler;
+import com.evil.inc.account.command.infrastructure.handlers.CommandHandler;
 import com.evil.inc.cqrs.core.commands.Command;
 import com.evil.inc.cqrs.core.infrastructure.CommandDispatcher;
 import lombok.RequiredArgsConstructor;
